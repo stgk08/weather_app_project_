@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}
+Registrer
+{% endblock %}
+
+{% block content %}
+
+<main class="auth-page">
+    <section class="auth-card">
+
+        <div class="auth-header">
+            <p class="small-label">Ny bruker</p>
+            <h1>Lag konto</h1>
+            <p>Registrer deg for å bruke værappen.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="message-list">
+                    {% for category, message in messages %}
+                        <div class="message {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="post" class="auth-form">
+            <label>
+                Brukernavn
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Minst 3 tegn"
+                    autocomplete="username"
+                    required>
+            </label>
+
+            <label>
+                Passord
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Minst 6 tegn"
+                    autocomplete="new-password"
+                    required>
+            </label>
+
+            <label>
+                Gjenta passord
+                <input
+                    type="password"
+                    name="confirm_password"
+                    placeholder="Skriv passord igjen"
+                    autocomplete="new-password"
+                    required>
+            </label>
+
+            <button type="submit">
+                Opprett konto
+            </button>
+        </form>
+
+        <p class="auth-switch">
+            Har du allerede bruker?
+            <a href="{{ url_for('login') }}">Logg inn</a>
+        </p>
+
+    </section>
+</main>
+
+{% endblock %}

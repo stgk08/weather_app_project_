@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}
+Kuben Vær-app
+{% endblock %}
+
+{% block content %}
+
+<header class="topbar">
+    <div>
+        <p class="small-label">Kuben Vær-app</p>
+        <h1>Værpanel</h1>
+    </div>
+
+    <nav>
+        <span>{{ username }}</span>
+        <a href="{{ url_for('logout') }}">Logg ut</a>
+    </nav>
+</header>
+
+<main class="dashboard single-dashboard">
+
+    <section class="weather-card">
+
+        <div class="card-top">
+            <div>
+                <p class="small-label">Valgt sted</p>
+                <h2>{{ city }}</h2>
+            </div>
+
+            <form method="get" class="city-form">
+                <select name="city">
+                    {% for city_name in cities %}
+                        <option value="{{ city_name }}" {% if city_name == city %}selected{% endif %}>
+                            {{ city_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit">
+                    Oppdater
+                </button>
+            </form>
+        </div>
+
+        {% if vaer %}
+
+        <div class="weather-main">
+
+            <div class="weather-icon">
+                {% set desc = vaer.beskrivelse.lower() %}
+
+                {% if "clear" in desc or "fair" in desc %}
+                    ☀️
+                {% elif "rain" in desc or "drizzle" in desc %}
+                    🌧️
+                {% elif "snow" in desc or "sleet" in desc %}
+                    ❄️
+                {% elif "cloud" in desc %}
+                    ☁️
+                {% elif "fog" in desc %}
+                    🌫️
+                {% else %}
+                    🌡️
+                {% endif %}
+            </div>
+
+            <div class="weather-temp">
+                {{ vaer.temperatur }}°C
+            </div>
+
+            <p class="weather-desc">
+                {{ vaer.beskrivelse }}
+            </p>
+
+        </div>
+
+        <div class="info-grid">
+
+            <div class="info-box">
+                <span>Status</span>
+                <strong>{{ cache_status }}</strong>
+            </div>
+
+            <div class="info-box">
+                <span>Sist oppdatert</span>
+                <strong>
+                    {% if vaer.sist_oppdatert %}
+                        {{ vaer.sist_oppdatert.strftime('%d.%m %H:%M') }}
+                    {% else %}
+                        Nettopp
+                    {% endif %}
+                </strong>
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+            Klarte ikke hente værdata akkurat nå.
+        </div>
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+{% endblock %}
